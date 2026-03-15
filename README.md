@@ -2,6 +2,22 @@
 
 A Python tool that creates print-ready PDFs for 5x7 paper with multiple layout options. Designed for home printing small photos for gifts, scrapbooks, wallets, and more.
 
+## Download
+
+Pre-built executables are available for each release:
+
+| Platform | Download |
+|----------|----------|
+| **Windows** | `photo-layout-windows-amd64.exe` |
+| **macOS** | `photo-layout-macos-amd64` |
+| **Linux** | `photo-layout-linux-amd64` |
+
+👉 **[Download Latest Release](../../releases/latest)**
+
+No Python installation required — just download and run!
+
+---
+
 ## The Story: Why 5x7 Paper?
 
 **5x7 inch paper is the secret weapon for affordable home photo printing.**
@@ -65,7 +81,27 @@ pip install reportlab Pillow
 
 ## Usage
 
-### Basic Usage
+### Using the Executable (Recommended)
+
+Download from [Releases](../../releases/latest), then:
+
+```bash
+# Generate both 4-up and 2-up layouts (default)
+./photo-layout --input /path/to/photos
+
+# Generate only 4-up layout
+./photo-layout --input /path/to/photos --layout 4up
+
+# Generate only 2-up layout  
+./photo-layout --input /path/to/photos --layout 2up
+
+# Specify custom output folder
+./photo-layout --input /path/to/photos --output /path/to/output
+```
+
+On Windows, use `photo-layout.exe` instead.
+
+### Using Python Directly
 
 ```bash
 # Generate both 4-up and 2-up layouts (default)
