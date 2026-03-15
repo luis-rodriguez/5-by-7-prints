@@ -1,5 +1,7 @@
 # 5x7 Photo Print Layout Generator
 
+![5x7 Photo Print Layout Generator](readme_banner.png)
+
 A Python tool that creates print-ready PDFs for 5x7 paper with multiple layout options. Designed for home printing small photos for gifts, scrapbooks, wallets, and more.
 
 ## Download
