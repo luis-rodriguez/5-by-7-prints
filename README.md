@@ -4,20 +4,6 @@
 
 A Python tool that creates print-ready PDFs for 5x7 paper with multiple layout options. Designed for home printing small photos for gifts, scrapbooks, wallets, and more.
 
-## Download
-
-Pre-built executables are available for each release:
-
-| Platform | Download |
-|----------|----------|
-| **Windows** | `photo-layout-windows-amd64.exe` |
-| **macOS** | `photo-layout-macos-amd64` |
-| **Linux** | `photo-layout-linux-amd64` |
-
-👉 **[Download Latest Release](../../releases/latest)**
-
-No Python installation required — just download and run!
-
 ---
 
 ## The Story: Why 5x7 Paper?
