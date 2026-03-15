@@ -81,7 +81,21 @@ pip install reportlab Pillow
 
 ## Usage
 
-### Using the Executable (Recommended)
+### Drag & Drop (Easiest)
+
+**Windows:** Drag your photo folder onto `photo-layout-windows-amd64.exe`
+
+**macOS:** 
+1. First time only: `chmod +x photo-layout-macos-amd64` in Terminal
+2. Drag your photo folder onto the executable
+
+**Linux:** Drag your photo folder onto `photo-layout-linux-amd64`
+
+The PDFs will be created in the same folder as your photos. The window stays open so you can see the results.
+
+---
+
+### Command Line
 
 Download from [Releases](../../releases/latest), then:
 

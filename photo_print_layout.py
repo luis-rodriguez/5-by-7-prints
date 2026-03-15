@@ -5,7 +5,6 @@ Creates print-ready PDFs for 5x7 paper mimicking Instax/Polaroid formats.
 
 The white border on every cut piece comes from the physical card's own frame
 dimensions — not from a generic margin. Photos are placed exactly to spec.
-
 Cut lines run only through the whitespace gap between photos, not across
 the photos themselves.
 
@@ -107,13 +106,28 @@ OUTPUT_DPI = 300
 IMAGE_EXTS = {'.jpg', '.jpeg', '.png', '.tif', '.tiff', '.webp'}
 CUT_COLOR  = (0.55, 0.55, 0.55)
 
+# Track if running in drag-drop mode (pause before exit)
+_INTERACTIVE = False
+
 # ─── HELPERS ──────────────────────────────────────────────────────────────────
+
+def pause_if_interactive():
+    """Pause before exit if running interactively (drag-drop on Windows/macOS)."""
+    if _INTERACTIVE:
+        input("\nPress Enter to exit...")
+
+
+def exit_with_error(msg: str, code: int = 1):
+    """Print error and exit, pausing if interactive."""
+    print(msg)
+    pause_if_interactive()
+    sys.exit(code)
+
 
 def get_images(folder: Path) -> list[Path]:
     imgs = [p for p in sorted(folder.iterdir()) if p.suffix.lower() in IMAGE_EXTS]
     if not imgs:
-        print(f"⚠️  No images found in {folder}")
-        sys.exit(1)
+        exit_with_error(f"⚠️  No images found in {folder}")
     return imgs
 
 
@@ -292,9 +306,14 @@ def build_layout(images: list[Path], fmt: dict, output_path: Path):
 def main():
     choices = list(FORMATS.keys()) + ["all"]
     parser = argparse.ArgumentParser(
-        description="Print-ready 5×7 PDFs matching Instax / Polaroid frame specs."
+        description="Print-ready 5×7 PDFs matching Instax / Polaroid frame specs.\n\n"
+                    "Drag & Drop: Simply drag a photo folder onto this executable!",
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("--input",  "-i", required=True,
+    # Positional argument for drag-and-drop (optional)
+    parser.add_argument("folder", nargs="?", default=None,
+                        help="Photo folder (drag & drop supported)")
+    parser.add_argument("--input",  "-i", default=None,
                         help="Folder of exported photos (JPG/PNG/TIF)")
     parser.add_argument("--layout", "-l", choices=choices, default="all",
                         help="Format to render (default: all)")
@@ -302,10 +321,22 @@ def main():
                         help="Output folder (default: same as input)")
     args = parser.parse_args()
 
-    input_folder = Path(args.input).expanduser().resolve()
-    if not input_folder.is_dir():
-        print(f"❌ Input folder not found: {input_folder}")
+    # Support both positional (drag-drop) and --input flag
+    input_path = args.folder or args.input
+    
+    # If a folder was passed directly (not via --input), we're in drag-drop mode
+    global _INTERACTIVE
+    _INTERACTIVE = args.folder is not None and args.input is None
+    
+    if not input_path:
+        parser.print_help()
+        print("\n💡 Tip: Drag a photo folder onto this executable, or use --input")
+        input("\nPress Enter to exit...")
         sys.exit(1)
+
+    input_folder = Path(input_path).expanduser().resolve()
+    if not input_folder.is_dir():
+        exit_with_error(f"❌ Input folder not found: {input_folder}")
     output_folder = (Path(args.output).expanduser().resolve()
                      if args.output else input_folder)
     output_folder.mkdir(parents=True, exist_ok=True)
@@ -335,6 +366,7 @@ def main():
 
     print("✅ Done! Print at 100% / actual size — no fit-to-page.")
     print("   Canon PRINT: 5×7 paper, Borderless OFF, Quality: High.")
+    pause_if_interactive()
 
 
 if __name__ == "__main__":
